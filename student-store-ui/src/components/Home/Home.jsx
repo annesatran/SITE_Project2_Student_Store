@@ -11,21 +11,24 @@ export default function Home(props) {
 
   return (
     <div className="home">
+      
       <Hero />
       <div className="main-content">
-        <div className="product-area">
-          <Searchbar 
-            setSearchQuery={setSearchQuery}/>
+        <div className="product-area" id="buy">
           <CategoryFilterBar
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}/>
-          <ProductGrid
-            products={props.products}
-            activeCategory={activeCategory}
-            searchQuery={searchQuery}
-            handleAddItemToCart={props.handleAddItemToCart}
-            handleRemoveItemFromCart={props.handleRemoveItemFromCart}
-            shoppingCart={props.shoppingCart} />
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}/>
+          <div className="right-col">
+            <Searchbar 
+              setSearchQuery={setSearchQuery}/>
+            <ProductGrid
+              products={props.products}
+              activeCategory={activeCategory}
+              searchQuery={searchQuery}
+              handleAddItemToCart={props.handleAddItemToCart}
+              handleRemoveItemFromCart={props.handleRemoveItemFromCart}
+              shoppingCart={props.shoppingCart} />
+          </div>
         </div>
         <AboutUs />
         <ContactUs />
@@ -37,10 +40,9 @@ export default function Home(props) {
 export function Searchbar( {setSearchQuery}) {
   return (
   <form className="search-bar">
-    <input type="text" id="searchbox-input" placeholder="Search"
+    <input type="text" id="searchbox-input" placeholder="Search..."
       onChange={(evt) => setSearchQuery(evt.target.value.toLocaleLowerCase())}
       ></input>
-    <button id="search-button" className="fa fa-search"></button>
   </form>
 
   )
@@ -53,19 +55,23 @@ export function CategoryFilterBar(props) {
 
   return (
     <div className="category-filter-bar">
-      <CategoryFilter
-        label={"All Categories"}
-        onClick = {() => props.setActiveCategory(null)}
-        isActive={!(props.activeCategory)} />
+      <h2>Shop</h2>
+        <div className="filter-buttons">
+          <h3>Filter by</h3>
+          <CategoryFilter
+            label={"All Categories"}
+            onClick = {() => props.setActiveCategory(null)}
+            isActive={!(props.activeCategory)} />
 
-      {categories.map(category => (
-        <CategoryFilter
-          key={category}
-          label={category.charAt(0).toUpperCase() + category.slice(1)}
-          onClick = {() => props.setActiveCategory(category)}
-          isActive={category == props.activeCategory}
-        />
-      ))}
+          {categories.map(category => (
+            <CategoryFilter
+              key={category}
+              label={category.charAt(0).toUpperCase() + category.slice(1)}
+              onClick = {() => props.setActiveCategory(category)}
+              isActive={category == props.activeCategory}
+            />
+          ))}
+        </div>
     </div>
     )
 }
@@ -81,7 +87,7 @@ export function CategoryFilter(props) {
 
 export function AboutUs() {
   return (
-    <div className="about">
+    <div className="about" id="about">
       <h2 className="section-header">About</h2>
       <div className="about-body">
         <div className="about-text">
@@ -98,7 +104,7 @@ export function AboutUs() {
 
 export function ContactUs() {
   return (
-    <div className="contact-us">
+    <div className="contact-us" id="contact-us">
       <h2 className="section-header">Contact Us</h2>
       <div className="contact-us-body">
         <div className="contact-us-grid">

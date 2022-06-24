@@ -6,7 +6,7 @@ import Home from "../Home/Home"
 import ProductDetail from "../ProductDetail/ProductDetail"
 import Footer from "../Footer/Footer"
 import NotFound from "../NotFound/NotFound"
-import axios from 'axios'
+import axios from "axios"
 import "./App.css"
 
 export default function App() {
@@ -17,14 +17,20 @@ export default function App() {
   const [error, setError] = React.useState("")
   const [isOpen, setIsOpen] = React.useState(false)
   const [shoppingCart, setShoppingCart] = React.useState([])
-  const [checkoutForm, setCheckoutForm] = React.useState()
-
-  // remove console.logs later
+  const [checkoutForm, setCheckoutForm] = React.useState({email:"", name:""})
+  const [checkoutMessage, setCheckoutMessage] = React.useState("")
+  const [purchaseOrder, setPurchaseOrder] = React.useState(null)
 
   const getData = async () => {
     setIsFetching(true)
     try {
-      const response = await axios.get("https://codepath-store-api.herokuapp.com/store");
+      // const response = await axios.get("https://codepath-store-api.herokuapp.com/store");
+      const response = await axios.get("http://localhost:3001/store");
+      
+      // throw error if there are no products found in the response
+      if ((!response.data.products) || response?.data?.products.length == 0 ) {
+        throw new Error("No products found")
+      }
       setProducts(response.data.products);
       console.log("received this data:", response.data.products);
     } catch (error) {
@@ -39,11 +45,10 @@ export default function App() {
     getData();
   }, []);
 
-  // handler functions
+  // HANDLER FUNCTIONS
 
   function handleOnToggle() {
     setIsOpen(!(isOpen));
-    // toggled the open/closed state of the sidebar
   }
 
   function handleAddItemToCart(productId) {
@@ -73,9 +78,41 @@ export default function App() {
   }
 
   function handleOnCheckoutFormChange(name, value) {
-    setCheckoutForm([name, value])
+    setCheckoutForm({...checkoutForm, [name]: value })
   }
 
+  async function handleOnSubmitCheckoutForm() {
+    // check if shopping cart is full and user has inputted the fields
+    if (!shoppingCart || shoppingCart.length === 0) {
+      setCheckoutMessage("Your shopping cart is empty!")
+      return null;
+    } else if (!checkoutForm || !checkoutForm.name || !checkoutForm.email) {
+      setCheckoutMessage("Missing name or email. Please enter to continue checking out.")
+      return null;
+    }
+
+    // if everything is there, attempt to make the API call
+    setIsFetching(true)
+
+    console.log("before api call:", JSON.stringify({user: checkoutForm, shoppingCart: shoppingCart}))
+
+    axios.post("http://localhost:3001/store", {user: checkoutForm, shoppingCart: shoppingCart} )
+      .then((res) => {
+        console.log(111, res.data.purchase)
+        setCheckoutMessage("Success!")
+        setPurchaseOrder(res.data.purchase)
+        setShoppingCart([])
+        setCheckoutForm({email:"", name:""})
+      })
+      .catch((err) => {
+        console.log(err)
+        setError(err)
+      })
+      .finally(() => {
+        setIsFetching(false)
+      })
+  }
+  
   return (
     <div className="app">
       <BrowserRouter>
@@ -87,7 +124,11 @@ export default function App() {
           products={products}
           checkoutForm={checkoutForm}
           handleOnCheckoutFormChange={handleOnCheckoutFormChange}
-          handleOnToggle={handleOnToggle} />
+          handleOnSubmitCheckoutForm={handleOnSubmitCheckoutForm}
+          handleOnToggle={handleOnToggle}
+          checkoutMessage={checkoutMessage}
+          purchaseOrder={purchaseOrder}
+          setPurchaseOrder={setPurchaseOrder} />
         <Routes>
           <Route path="/" element={
             <Home

@@ -4,13 +4,19 @@ import "./ProductCard.css"
 
 export default function ProductCard(props) {
 
-  let USDFormat = Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  // calculate quantity of the product
+  // let productQuantity = 0
+  // console.log("shopping cart", props.shoppingCart)
+  // const  targetProduct = props.shoppingCart.find((productObj) => productObj.itemId == props.product.id)
+  // if (targetProduct) {
+  //   productQuantity = targetProduct.quantity
+  // }
+
+
+  const productCardClassName = props.showDescription ? "product-card expanded" : "product-card"
 
   return (
-    <div className="product-card">
+    <div className={productCardClassName}>
       <div className="media">
         <Link to={"/products/" + props.productId}>
           <img src={props.product.image} alt={`Image of ${props.product.name}`} />
@@ -21,7 +27,7 @@ export default function ProductCard(props) {
         <h1>{props.product.name}</h1>
       </div>
       <div className="product-price">
-        <h2>{USDFormat.format(props.product.price)}</h2>
+        <h2>{"$"+props.product.price.toFixed(2)}</h2>
       </div>
       <div className="product-description">
         <p>{props.showDescription ? props.product.description : null}</p>
@@ -30,11 +36,9 @@ export default function ProductCard(props) {
       <button className="remove" onClick={() => props.handleRemoveItemFromCart(props.productId)}>-</button>
       <button className="add" onClick={() => props.handleAddItemToCart(props.productId)}>+</button>
       
-      <p>{props.quantity}</p>
-
-      {/* need to define shoppingCart object first */}
-      {/* <p className="product-quantity">{shoppingCart > 0 : {shoppingCart} : null}</p> */}
-
+      <div className="product-quantity">
+        <p>{props.quantity > 0 ? props.quantity : ""}</p>
+      </div>
     </div>
   )
 }

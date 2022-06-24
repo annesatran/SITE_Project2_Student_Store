@@ -11,18 +11,33 @@ export default function ProductGrid(props) {
     productsToRender = productsToRender.filter(product => product.name.toLowerCase().includes(props.searchQuery))
   }
 
+  if (productsToRender.length === 0) {
+    return (
+      <div className="product-grid">
+        <p className="notification">No products available</p>
+      </div>
+    )
+  }
+
   return (
     <div className="product-grid">
-    {productsToRender.map(product =>
+    {productsToRender.map(product => {
+      let productQuantity = 0
+      const  targetProduct = props.shoppingCart.find((productObj) => productObj.itemId == product.id)
+      if (targetProduct) {
+        productQuantity = targetProduct.quantity
+      }
+      return (
       <ProductCard
         key={product.id}
         product={product}
         productId={product.id}
-        // would need to get info from shopping cart, not defined yet
-        quantity={9}
+        quantity={productQuantity}
         handleAddItemToCart={props.handleAddItemToCart}
         handleRemoveItemFromCart={props.handleRemoveItemFromCart}
-        showDescription={false}/>
+        shoppingCart={props.shoppingCart}
+        showDescription={false}/> )
+    }
     )}
     </div>
   )
