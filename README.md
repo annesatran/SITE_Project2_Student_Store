@@ -18,12 +18,18 @@ User can click on a product in the grid to view additional product details with 
 
 #### WEEK 3 Backend Previews
 
-Core features: Displays sections, can filter by category and search, can add and remove items from shopping cart, sidebar toggles and shows shopping cart and checkout form, shows error messages and succes messages, user can checkout and view receipt.
-Stretch features: Has top bar navigation, shows "Not found" page, shows message in product grid when no items are found.
-![](https://i.imgur.com/tMgmDe4.gif)
+Core features: Displays sections, can filter by category and search, can add and remove items from shopping cart, sidebar toggles and shows shopping cart and checkout form, shows error messages and success messages, user can checkout and view receipt.
+Stretch features: Shows message in product grid when no items are found.
+![](https://i.imgur.com/GA1qXty.gif)
+
+Core features: Can view product page and increment/decrement from it, user can click logo to go home
+Stretch features: Has top bar navigation, shows "Not found" page
+![](https://i.imgur.com/IglYBz6.gif)
+
 
 API Get requests work
 ![](https://i.imgur.com/L6ydNmg.gif)
+
 
 
 ### Application Features
